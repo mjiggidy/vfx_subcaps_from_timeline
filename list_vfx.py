@@ -29,17 +29,22 @@ if __name__ == "__main__":
 
 		bin_contents = bin_handle.content
 
+		# Get top timeline
 		timelines = avbutils.get_timelines_from_bin(bin_contents)
 		first_timeline = next(timelines)
-		print(first_timeline)
-
-		video_tracks = avbutils.get_tracks_from_composition(first_timeline, avbutils.TrackTypes.PICTURE)
-		
-		vfx_tracks = [t for t in video_tracks if "attributes" in t.property_data and t.attributes.get("_COMMENT","").lower() == VFX_IDS_TRACK_LABEL.lower()]
-
-		vfx_track = vfx_tracks.pop()
-		
 		timeline_timecode = avbutils.get_timecode_range_for_composition(first_timeline)
+		print(first_timeline.name)
+		
+		# Get VFX Subcap track (track labeled "VFX IDs")
+		vfx_track = next(t 
+			for t in avbutils.get_tracks_from_composition(first_timeline, avbutils.TrackTypes.PICTURE)
+			if "attributes" in t.property_data
+			and t.attributes.get("_COMMENT","").lower() == VFX_IDS_TRACK_LABEL.lower()
+		)
+
+		# Get dailies/plates track (V1)
+		dailies_track = next(avbutils.get_tracks_from_composition(first_timeline, avbutils.TrackTypes.PICTURE, index=1))
+		
 		components = avbutils.get_components_from_track_component(vfx_track.component)
 		
 		tc_current = timeline_timecode.start
