@@ -73,12 +73,16 @@ if __name__ == "__main__":
 					subcap_text = get_subcap_caption(component)
 					
 					plate, plate_offset = get_plate_at_position(tc_current - timeline_timecode.start, dailies_track.component)
-					plate_masterclip = avbutils.matchback_to_masterclip(plate)
-					plate_source = avbutils.matchback_to_sourcemob(plate_masterclip)
-					tc_source = avbutils.get_timecode_range_for_composition(plate_source)
-					tc_plate = timecode.TimecodeRange(start=timeline_timecode.start + plate_offset, duration=plate.length)
+					
+					plate_subclip = avbutils.matchback_to_sourceclip(plate)
+					plate_masterclip = avbutils.matchback_to_masterclip(plate_subclip)
+					plate_sourcemob = avbutils.matchback_to_sourcemob(plate)
+					
+					tc_masterclip = avbutils.get_timecode_range_for_composition(plate_sourcemob)                                                       # Masterclip full TC extents
+					tc_subclip_location = timecode.TimecodeRange(start=timeline_timecode.start + plate_offset, duration=plate.length)                  # Reel TC location
+					tc_masterclip_range = timecode.TimecodeRange(start=tc_masterclip.start + plate_subclip.start_time + 1, duration=plate_subclip.length)  # Subclipped range of masterclip
 
-					print(f"{tc_current} - {tc_current + component.length}\t{subcap_text}\t{plate_masterclip.name.ljust(10)}\t{plate_source.name.ljust(10)}\t{tc_plate.start} - {tc_plate.end}\t{tc_source}")
+					print(f"{tc_current} - {tc_current + component.length}\t{subcap_text}\t{plate_masterclip.name.ljust(10)}\t{plate_sourcemob.name.ljust(10)}\t{tc_subclip_location.start} - {tc_subclip_location.end}\t{tc_masterclip_range.start} - {tc_masterclip_range.end}")
 
 				
 			
