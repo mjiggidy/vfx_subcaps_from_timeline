@@ -4,8 +4,8 @@ import avb, avbutils, timecode
 VFX_IDS_TRACK_LABEL = "VFX IDs"
 """Label given to the track containing  VFX ID subcaps"""
 
-UUID_SUBCAP_TEXT = uuid.UUID("bac7f4c7-7eeb-4898-be2c-085f07113cc5")
-#UUID_SUBCAP_TEXT = uuid.UUID("3319f04a-ac69-4525-b9e8-2206362fd233")	# This one shows up too?
+#UUID_SUBCAP_TEXT = uuid.UUID("bac7f4c7-7eeb-4898-be2c-085f07113cc5")	# Seems to be a name or something -- copying and pasting, then changing text, does not change this value
+UUID_SUBCAP_TEXT = uuid.UUID("3319f04a-ac69-4525-b9e8-2206362fd233")	# This is a text
 
 def get_subcap_caption(track_effect:avb.trackgroups.TrackEffect):
 
